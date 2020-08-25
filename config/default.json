@@ -1,5 +1,8 @@
 {
     "port": 5000,
     "jwtSecret":"dimaa.ru",
-    "mongoUri": "mongodb+srv://dimaa:dimaa@cluster0.xvqre.azure.mongodb.net/app?retryWrites=true&w=majority"
+    "mongoUri": "mongodb+srv://vladilen:1234qwer@cluster0-kggc2.azure.mongodb.net/app?retryWrites=true&w=majority",
+    //"mongoUri": "mongodb+srv://dimaa:dimaa@cluster0.x0ghd.azure.mongodb.net/app?retryWrites=true&w=majority",
+    "baseUrl":"http://localhost:5000"
 }
+

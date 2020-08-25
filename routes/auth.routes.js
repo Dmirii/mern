@@ -18,6 +18,7 @@ router.post(
     ],
     async( req, res)=>{
     try {
+       
         // проводим валидацию данных от фронта
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -25,16 +26,19 @@ router.post(
                 errors: errors.array(),
                 message:'Registration data is not correct'
             })
-        }
+        } 
 
         // получаем данные от фронтенда
         const {email, password} =req.body;
 
         // ищим совпадение имейла перед созданием нового пользоваетля
         const candidate =await User.findOne({ email: email});
+        
+      
         // если такой пользователь есть то прерываем регистрацию 
         if(candidate){
-            return res.status(400).json({message:'This User is allready exist'})
+          
+            return res.status(400).json({message:'This User is allready exist!'})
         }
 
         // хешируем пароль. фнккция асинхронная
@@ -43,15 +47,18 @@ router.post(
         const user = new User({
                              email:email, 
                              password:hashedPassword 
-                            });
-                        
+                            });    
+        
         await user.save();
+      
         // отвечаем фронтенду
         res.status(201).json({message:"New User add to DB"})
 
 
     } catch (e){
-        res.status(500).json({message:'We have some problems...'})
+      
+        res.status(500).json({message:'We have some problems with registration...'});
+       
 
     }
 
@@ -81,9 +88,11 @@ router.post(
         const {email, password} =req.body;
         // ищим совпадение имейла перед логином в БД
         const user =await User.findOne({ email: email});
+        
         if(!user){
             return res.status(400).json({message:'The User is not found'})
-        }
+        } 
+       
 
         // сравниваем пароль в базе с пародем от фронтенда
         const isMatch = await bcrypt.compare(password, user.password);
@@ -94,7 +103,7 @@ router.post(
         const token = jwt.sign(
             {userId: user.id}, // user.id )
             config.get('jwtSecret'), // секретная строчка из фала конфигуратора
-            {expiresIn:'1h'} // время жизни токена
+           // {expiresIn:'1h'} // время жизни токена
         )
 
         // по умолчанию статус 200
@@ -103,7 +112,7 @@ router.post(
       
 
     } catch (e){
-        res.status(500).json({message:'We have some problems...'})
+        res.status(500).json({message:'We have some problems with logIn...'})
 
     }
 
